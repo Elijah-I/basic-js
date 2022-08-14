@@ -1,33 +1,36 @@
-const { NotImplementedError } = require('../extensions/index.js');
+function minesweeper(matrix) {
+	const check = (row, pos, self) => {
+		let mines = 0
+		if (row) {
+			if (row[+pos - 1]) mines++
+			if (row[+pos + 1]) mines++
+			if (self && row[pos]) mines++
+		}
+		return mines
+	}
 
-/**
- * In the popular Minesweeper game you have a board with some mines and those cells
- * that don't contain a mine have a number in it that indicates the total number of mines
- * in the neighboring cells. Starting off with some arrangement of mines
- * we want to create a Minesweeper game setup.
- *
- * @param {Array<Array>} matrix
- * @return {Array<Array>}
- *
- * @example
- * matrix = [
- *  [true, false, false],
- *  [false, true, false],
- *  [false, false, false]
- * ]
- *
- * The result should be following:
- * [
- *  [1, 2, 1],
- *  [2, 1, 1],
- *  [1, 1, 1]
- * ]
- */
-function minesweeper(/* matrix */) {
-  throw new NotImplementedError('Not implemented');
-  // remove line with error and write your code here
+	return matrix.reduce((acc, row, i, base) => {
+		const prewRow = base[i - 1]
+		const nextRow = base[i + 1]
+
+		const settedRow = []
+
+		for (pos in row) {
+			let mines = 0
+
+			mines += check(row, pos, false)
+			mines += check(prewRow, pos, true)
+			mines += check(nextRow, pos, true)
+
+			settedRow.push(mines)
+		}
+
+		acc.push(settedRow)
+
+		return acc
+	}, [])
 }
 
 module.exports = {
-  minesweeper
-};
+	minesweeper
+}
